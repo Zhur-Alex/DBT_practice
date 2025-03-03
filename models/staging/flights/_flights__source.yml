@@ -1,0 +1,30 @@
+sources:
+  - name: demo_src
+    description: Данные из БД авиаперелётов # описываем источник
+    database: dwh_flights_training
+    schema: demo_src
+    tables:
+     - name: aircrafts
+       description: Модели самолетов # тут сделали описание для таблицы и её колонок
+       columns: 
+        - name: aircraft_code
+          description: Код модели самолёта
+        - name: model
+          description: Название модели
+     - name: airports
+     - name: seats
+     - name: bookings
+       columns:
+       - name: book_ref
+       - name: book_date
+       - name: total_amount
+       freshness:
+        warn_after:
+          count: 60000000 # т.е. если самая свежая запись живет в таблице больше 6 часов
+          period: hour # то получим предупреждение
+        error_after:
+          count: 100000 # а если больше одного дня
+          period: day # то будет ошибка
+        filter: current_timestamp::date - book_date::date < 300000 # если хотим брать не все строки таблицы, а отфильтровать их (для сокращение времени расчета)
+       loaded_at_field: book_date::timestamp # поле, по которому идет проверка возраста, ОБЯЗАТЕЛЬНО TIMESTAMP
+       
