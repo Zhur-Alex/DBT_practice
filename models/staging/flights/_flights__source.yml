@@ -13,6 +13,9 @@ sources:
           description: Название модели
      - name: airports
      - name: seats
+     - name: ticket_flights
+     - name: boarding_passes
+     - name: flights
      - name: bookings
        columns:
        - name: book_ref
@@ -27,4 +30,3 @@ sources:
           period: day # то будет ошибка
         filter: current_timestamp::date - book_date::date < 300000 # если хотим брать не все строки таблицы, а отфильтровать их (для сокращение времени расчета)
        loaded_at_field: book_date::timestamp # поле, по которому идет проверка возраста, ОБЯЗАТЕЛЬНО TIMESTAMP
-       
